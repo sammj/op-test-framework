@@ -863,26 +863,25 @@
 <div class="viewcode-block" id="OpTestIPMI.ipmi_code_update"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.OpTestIPMI.ipmi_code_update">[docs]</a>    <span class="k">def</span> <span class="nf">ipmi_code_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_image</span><span class="p">,</span> <span class="n">i_imagecomponent</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_cold_reset</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">l_cmd</span> <span class="o">=</span> <span class="n">BMC_CONST</span><span class="o">.</span><span class="n">BMC_HPM_UPDATE</span> <span class="o">+</span> <span class="n">i_image</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">i_imagecomponent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_preserve_network_setting</span><span class="p">()</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># FIXME: This is currently broken with the ipmitool rework</span>
-            <span class="c1"># We&#39;re likely to timeout waiting for the user to hit &#39;y&#39;</span>
+        <span class="c1"># We need to do a re-try of hpm code update if it fails for the first time</span>
+        <span class="c1"># As AMI systems are some times failed to flash for the first time.</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_preserve_network_setting</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
             <span class="n">rc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipmitool</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">l_cmd</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmdprefix</span> <span class="o">=</span> <span class="s2">&quot;echo y |&quot;</span><span class="p">)</span>
             <span class="nb">print</span> <span class="n">rc</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_cold_reset</span><span class="p">()</span>
-
-        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
-            <span class="n">l_msg</span> <span class="o">=</span> <span class="s2">&quot;Code Update Failed&quot;</span>
-            <span class="nb">print</span> <span class="n">l_msg</span>
-            <span class="k">raise</span> <span class="n">OpTestError</span><span class="p">(</span><span class="n">l_msg</span><span class="p">)</span>
-
-        <span class="k">if</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s2">&quot;Firmware upgrade procedure successful&quot;</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="n">BMC_CONST</span><span class="o">.</span><span class="n">FW_SUCCESS</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">l_msg</span> <span class="o">=</span> <span class="s2">&quot;Code Update Failed&quot;</span>
-            <span class="nb">print</span> <span class="n">l_msg</span>
-            <span class="k">raise</span> <span class="n">OpTestError</span><span class="p">(</span><span class="n">l_msg</span><span class="p">)</span></div>
+            <span class="k">if</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s2">&quot;Firmware upgrade procedure successful&quot;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">BMC_CONST</span><span class="o">.</span><span class="n">FW_SUCCESS</span>
+            <span class="k">elif</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">l_msg</span> <span class="o">=</span> <span class="s2">&quot;Code Update Failed&quot;</span>
+                <span class="nb">print</span> <span class="n">l_msg</span>
+                <span class="k">raise</span> <span class="n">OpTestError</span><span class="p">(</span><span class="n">l_msg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">continue</span></div>
 
     <span class="c1">##</span>
     <span class="c1"># @brief Get information on active sides for both BMC and PNOR</span>
