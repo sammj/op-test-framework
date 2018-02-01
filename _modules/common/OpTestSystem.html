@@ -178,11 +178,16 @@
 
 <div class="viewcode-block" id="OpTestSystem.goto_state"><a class="viewcode-back" href="../../programming.html#common.OpTestSystem.OpTestSystem.goto_state">[docs]</a>    <span class="k">def</span> <span class="nf">goto_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="nb">print</span> <span class="s2">&quot;OpTestSystem START STATE: </span><span class="si">%s</span><span class="s2"> (target </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">never_unknown</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="n">OpSystemState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+                <span class="n">never_unknown</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateHandlers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">](</span><span class="n">state</span><span class="p">)</span>
             <span class="nb">print</span> <span class="s2">&quot;OpTestSystem TRANSITIONED TO: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">state</span><span class="p">:</span>
-                <span class="k">break</span><span class="p">;</span></div>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">if</span> <span class="n">never_unknown</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">OpSystemState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="s1">&#39;System State transition failure: should not have progressed to UNKNOWN!&#39;</span></div>
 
 <div class="viewcode-block" id="OpTestSystem.run_UNKNOWN"><a class="viewcode-back" href="../../programming.html#common.OpTestSystem.OpTestSystem.run_UNKNOWN">[docs]</a>    <span class="k">def</span> <span class="nf">run_UNKNOWN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sys_power_off</span><span class="p">()</span>
@@ -264,7 +269,7 @@
             <span class="c1"># Wait for ip to ping as we run host commands immediately</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">PingFunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_HOST</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="n">BMC_CONST</span><span class="o">.</span><span class="n">PING_RETRY_POWERCYCLE</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">OpSystemState</span><span class="o">.</span><span class="n">OS</span>
-        <span class="k">raise</span> <span class="s1">&#39;Failed to boot&#39;</span></div>
+        <span class="k">return</span> <span class="n">OpSystemState</span><span class="o">.</span><span class="n">UNKNOWN</span></div>
 
 <div class="viewcode-block" id="OpTestSystem.run_OS"><a class="viewcode-back" href="../../programming.html#common.OpTestSystem.OpTestSystem.run_OS">[docs]</a>    <span class="k">def</span> <span class="nf">run_OS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">OpSystemState</span><span class="o">.</span><span class="n">OS</span><span class="p">:</span>

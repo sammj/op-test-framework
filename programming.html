@@ -129,10 +129,15 @@ find the needed config file</p>
 <span id="opexpect"></span><h2>OPExpect<a class="headerlink" href="#module-common.OPexpect" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="common.OPexpect.spawn">
-<em class="property">class </em><code class="descclassname">common.OPexpect.</code><code class="descname">spawn</code><span class="sig-paren">(</span><em>command</em>, <em>args=[]</em>, <em>timeout=30</em>, <em>maxread=2000</em>, <em>searchwindowsize=None</em>, <em>logfile=None</em>, <em>cwd=None</em>, <em>env=None</em>, <em>ignore_sighup=False</em>, <em>echo=True</em>, <em>preexec_fn=None</em>, <em>encoding=None</em>, <em>codec_errors='strict'</em>, <em>dimensions=None</em>, <em>op_test_system=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OPexpect.html#spawn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OPexpect.spawn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">common.OPexpect.</code><code class="descname">spawn</code><span class="sig-paren">(</span><em>command</em>, <em>args=[]</em>, <em>timeout=30</em>, <em>maxread=2000</em>, <em>searchwindowsize=None</em>, <em>logfile=None</em>, <em>cwd=None</em>, <em>env=None</em>, <em>ignore_sighup=False</em>, <em>echo=True</em>, <em>preexec_fn=None</em>, <em>encoding=None</em>, <em>codec_errors='strict'</em>, <em>dimensions=None</em>, <em>failure_callback=None</em>, <em>failure_callback_data=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OPexpect.html#spawn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OPexpect.spawn" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="common.OPexpect.spawn.expect">
 <code class="descname">expect</code><span class="sig-paren">(</span><em>pattern</em>, <em>timeout=-1</em>, <em>searchwindowsize=-1</em>, <em>async=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OPexpect.html#spawn.expect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OPexpect.spawn.expect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="common.OPexpect.spawn.set_system">
+<code class="descname">set_system</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OPexpect.html#spawn.set_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OPexpect.spawn.set_system" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2760,6 +2765,11 @@ i.e. How long to poll the OS Boot sensor for working state before giving up.</td
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="common.OpTestIPMI.IPMIConsole.set_system">
+<code class="descname">set_system</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestIPMI.html#IPMIConsole.set_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestIPMI.IPMIConsole.set_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="common.OpTestIPMI.IPMIConsole.terminate">
 <code class="descname">terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestIPMI.html#IPMIConsole.terminate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestIPMI.IPMIConsole.terminate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3074,6 +3084,11 @@ i.e. How long to poll the OS Boot sensor for working state before giving up.</td
 <code class="descname">sdr_get_watchdog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestIPMI.html#OpTestIPMI.sdr_get_watchdog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestIPMI.OpTestIPMI.sdr_get_watchdog" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="common.OpTestIPMI.OpTestIPMI.set_system">
+<code class="descname">set_system</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestIPMI.html#OpTestIPMI.set_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestIPMI.OpTestIPMI.set_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -3115,6 +3130,11 @@ i.e. How long to poll the OS Boot sensor for working state before giving up.</td
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="function">
+<dt id="common.OpTestIPMI.set_system_to_UNKNOWN">
+<code class="descclassname">common.OpTestIPMI.</code><code class="descname">set_system_to_UNKNOWN</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestIPMI.html#set_system_to_UNKNOWN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestIPMI.set_system_to_UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 </div>
@@ -3480,6 +3500,11 @@ data = ‘’{“data” : []}’‘</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="common.OpTestOpenBMC.HostConsole.set_system">
+<code class="descname">set_system</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestOpenBMC.html#HostConsole.set_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestOpenBMC.HostConsole.set_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="common.OpTestOpenBMC.HostConsole.terminate">
 <code class="descname">terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestOpenBMC.html#HostConsole.terminate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestOpenBMC.HostConsole.terminate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3805,6 +3830,11 @@ data = ‘’{“data” : []}’‘</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="common.OpTestOpenBMC.OpTestOpenBMC.set_system">
+<code class="descname">set_system</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestOpenBMC.html#OpTestOpenBMC.set_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestOpenBMC.OpTestOpenBMC.set_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="common.OpTestOpenBMC.OpTestOpenBMC.skiboot_img_flash_openbmc">
 <code class="descname">skiboot_img_flash_openbmc</code><span class="sig-paren">(</span><em>lid_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestOpenBMC.html#OpTestOpenBMC.skiboot_img_flash_openbmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestOpenBMC.OpTestOpenBMC.skiboot_img_flash_openbmc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3815,6 +3845,11 @@ data = ‘’{“data” : []}’‘</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="function">
+<dt id="common.OpTestOpenBMC.set_system_to_UNKNOWN">
+<code class="descclassname">common.OpTestOpenBMC.</code><code class="descname">set_system_to_UNKNOWN</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/common/OpTestOpenBMC.html#set_system_to_UNKNOWN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#common.OpTestOpenBMC.set_system_to_UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-common.OpTestFSP">

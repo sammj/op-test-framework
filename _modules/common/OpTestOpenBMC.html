@@ -76,6 +76,7 @@
 <span class="kn">from</span> <span class="nn">common.OpTestError</span> <span class="k">import</span> <span class="n">OpTestError</span>
 <span class="kn">from</span> <span class="nn">OpTestConstants</span> <span class="k">import</span> <span class="n">OpTestConstants</span> <span class="k">as</span> <span class="n">BMC_CONST</span>
 <span class="kn">from</span> <span class="nn">common</span> <span class="k">import</span> <span class="n">OPexpect</span>
+<span class="kn">import</span> <span class="nn">OpTestSystem</span>
 
 <div class="viewcode-block" id="FailedCurlInvocation"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.FailedCurlInvocation">[docs]</a><span class="k">class</span> <span class="nc">FailedCurlInvocation</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
@@ -90,6 +91,11 @@
     <span class="n">DISCONNECTED</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">CONNECTED</span> <span class="o">=</span> <span class="mi">1</span></div>
 
+<div class="viewcode-block" id="set_system_to_UNKNOWN"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.set_system_to_UNKNOWN">[docs]</a><span class="k">def</span> <span class="nf">set_system_to_UNKNOWN</span><span class="p">(</span><span class="n">system</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">OpTestSystem</span><span class="o">.</span><span class="n">OpSystemState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
 <div class="viewcode-block" id="HostConsole"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.HostConsole">[docs]</a><span class="k">class</span> <span class="nc">HostConsole</span><span class="p">():</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">22</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">ConsoleState</span><span class="o">.</span><span class="n">DISCONNECTED</span>
@@ -98,6 +104,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="HostConsole.set_system"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.HostConsole.set_system">[docs]</a>    <span class="k">def</span> <span class="nf">set_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span></div>
 
 <div class="viewcode-block" id="HostConsole.terminate"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.HostConsole.terminate">[docs]</a>    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ConsoleState</span><span class="o">.</span><span class="n">CONNECTED</span><span class="p">:</span>
@@ -133,7 +143,9 @@
                <span class="o">+</span> <span class="s2">&quot; -l </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
            <span class="p">)</span>
         <span class="nb">print</span> <span class="n">cmd</span>
-        <span class="n">solChild</span> <span class="o">=</span> <span class="n">OPexpect</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="n">logfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">solChild</span> <span class="o">=</span> <span class="n">OPexpect</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="n">logfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span>
+                                  <span class="n">failure_callback</span><span class="o">=</span><span class="n">set_system_to_UNKNOWN</span><span class="p">,</span>
+                                  <span class="n">failure_callback_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">ConsoleState</span><span class="o">.</span><span class="n">CONNECTED</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sol</span> <span class="o">=</span> <span class="n">solChild</span>
         <span class="k">return</span> <span class="n">solChild</span></div>
@@ -964,6 +976,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bmc</span> <span class="o">=</span> <span class="n">OpTestBMC</span><span class="p">(</span><span class="n">ip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
                             <span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
                             <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OpTestOpenBMC.set_system"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.OpTestOpenBMC.set_system">[docs]</a>    <span class="k">def</span> <span class="nf">set_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">set_system</span><span class="p">(</span><span class="n">system</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OpTestOpenBMC.has_new_pnor_code_update"><a class="viewcode-back" href="../../programming.html#common.OpTestOpenBMC.OpTestOpenBMC.has_new_pnor_code_update">[docs]</a>    <span class="k">def</span> <span class="nf">has_new_pnor_code_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_vpnor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

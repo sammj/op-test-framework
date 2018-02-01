@@ -193,12 +193,21 @@
     <span class="n">DISCONNECTED</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">CONNECTED</span> <span class="o">=</span> <span class="mi">1</span></div>
 
+<div class="viewcode-block" id="set_system_to_UNKNOWN"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.set_system_to_UNKNOWN">[docs]</a><span class="k">def</span> <span class="nf">set_system_to_UNKNOWN</span><span class="p">(</span><span class="n">system</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">OpTestSystem</span><span class="o">.</span><span class="n">OpSystemState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
 <div class="viewcode-block" id="IPMIConsole"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.IPMIConsole">[docs]</a><span class="k">class</span> <span class="nc">IPMIConsole</span><span class="p">():</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipmitool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">delaybeforesend</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ipmitool</span> <span class="o">=</span> <span class="n">ipmitool</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">IPMIConsoleState</span><span class="o">.</span><span class="n">DISCONNECTED</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delaybeforesend</span> <span class="o">=</span> <span class="n">delaybeforesend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="IPMIConsole.set_system"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.IPMIConsole.set_system">[docs]</a>    <span class="k">def</span> <span class="nf">set_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span></div>
 
 <div class="viewcode-block" id="IPMIConsole.terminate"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.IPMIConsole.terminate">[docs]</a>    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">IPMIConsoleState</span><span class="o">.</span><span class="n">CONNECTED</span><span class="p">:</span>
@@ -235,7 +244,9 @@
 
         <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipmitool</span><span class="o">.</span><span class="n">binary_name</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipmitool</span><span class="o">.</span><span class="n">arguments</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; sol activate&#39;</span>
         <span class="nb">print</span> <span class="n">cmd</span>
-        <span class="n">solChild</span> <span class="o">=</span> <span class="n">OPexpect</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="n">logfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">solChild</span> <span class="o">=</span> <span class="n">OPexpect</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="n">logfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span>
+                                  <span class="n">failure_callback</span><span class="o">=</span><span class="n">set_system_to_UNKNOWN</span><span class="p">,</span>
+                                  <span class="n">failure_callback_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">IPMIConsoleState</span><span class="o">.</span><span class="n">CONNECTED</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sol</span> <span class="o">=</span> <span class="n">solChild</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">delaybeforesend</span><span class="p">:</span>
@@ -390,6 +401,9 @@
                                    <span class="n">delaybeforesend</span><span class="o">=</span><span class="n">delaybeforesend</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">util</span> <span class="o">=</span> <span class="n">OpTestUtil</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+
+<div class="viewcode-block" id="OpTestIPMI.set_system"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.OpTestIPMI.set_system">[docs]</a>    <span class="k">def</span> <span class="nf">set_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">set_system</span><span class="p">(</span><span class="n">system</span><span class="p">)</span></div>
 
     <span class="c1"># Get the IPMIConsole object, to run commands on the host etc.</span>
 <div class="viewcode-block" id="OpTestIPMI.get_host_console"><a class="viewcode-back" href="../../programming.html#common.OpTestIPMI.OpTestIPMI.get_host_console">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_console</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
